@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>masterplan</title>
+    <title>masterplan.</title>
     <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/master.css">
     <!--[if IE]>
@@ -28,24 +28,30 @@
         </tr>
       </thead>
       <tbody>
-        <% @features.each do |feature| %>
+        <% if @features.any? %>
+          <% @features.each do |feature| %>
+            <tr>
+              <td>
+                <span class="feature">
+                  <span class="status"></span>
+                  <span class="name"><%= feature.name %></span>
+                </span>
+              </td>
+              <td><%= feature.person %></td>
+              <td><%= feature.importance %></td>
+              <td><%= feature.target %></td>
+              <td><% if feature.stage == 0 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td><% if feature.stage == 1 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td><% if feature.stage == 2 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td><% if feature.stage == 3 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td><% if feature.stage == 4 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td><% if feature.stage == 5 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td><% if feature.stage == 6 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+            </tr>
+          <% end %>
+        <% else %>
           <tr>
-            <td>
-              <span class="feature">
-                <span class="status"></span>
-                <span class="name"><%= feature.name %></span>
-              </span>
-            </td>
-            <td><%= feature.person %></td>
-            <td><%= feature.importance %></td>
-            <td><%= feature.target %></td>
-            <td><% if feature.stage == 0 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-            <td><% if feature.stage == 1 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-            <td><% if feature.stage == 2 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-            <td><% if feature.stage == 3 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-            <td><% if feature.stage == 4 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-            <td><% if feature.stage == 5 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-            <td><% if feature.stage == 6 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+            <td id="no-plans" colspan="11">Whoa, you have no plans! Start brainstorming...</td>
           </tr>
         <% end %>
       </tbody>

@@ -18,3 +18,4 @@ td:first-child { text-align: left; border-left: 0; }
 .feature.active .status { background: #f90; }
 .feature.released { background: #e5ffe5; }
 .feature.released .status { background: #0f0; }
+#no-plans { text-align: center; padding: 20px; background: #fafafa; }
