@@ -1,0 +1,20 @@
+* { font-family: Helvetica, arial, sans-serif; }
+h1 { width: 95%; margin: 50px auto 20px; }
+table { width: 95%; border-collapse: separate; border-spacing: 0; margin: 0 auto; }
+table th,
+table td { text-align: center; font-size: 14px; line-height: 2em; vertical-align: middle; }
+thead th { padding: 4px 0; border: 2px solid #000; border-width: 2px 0; line-height: 1em; }
+th#person,
+th#importance,
+th.stage { width: 70px; }
+th#target { width: 140px; }
+tbody td { border-top: 1px solid #ccc; border-left: 1px solid #000; }
+tbody tr:first-child td { border-top: 2px solid #000; margin-top: 2px; }
+tfoot td { border-top: 4px solid #000; }
+td:first-child { text-align: left; border-left: 0; }
+.feature { position: relative; display: block; padding-left: 10px; margin: 2px 2px 2px 0; background: #fafafa; }
+.feature .status { width: 4px; height: 100%; background: #ccc; position: absolute; left: 0; }
+.feature.active { background: #fff5e5; }
+.feature.active .status { background: #f90; }
+.feature.released { background: #e5ffe5; }
+.feature.released .status { background: #0f0; }

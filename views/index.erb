@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>masterplan</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/master.css">
+    <!--[if IE]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1><img src="/images/logo.png" alt="Master Plan"></h1>
+    <table>
+      <thead>
+        <tr>
+          <th id="feature">&nbsp;</th>
+          <th id="person"><img src="/images/person.png" alt="Person"></th>
+          <th id="importance"><img src="/images/importance.png" alt="Importance"></th>
+          <th id="target"><img src="/images/target.png" alt="Target Date"></th>
+          <th class="stage"><img src="/images/waiting.png" alt="Waiting"></th>
+          <th class="stage"><img src="/images/started.png" alt="Started"></th>
+          <th class="stage"><img src="/images/qa.png" alt="QA"></th>
+          <th class="stage"><img src="/images/staging.png" alt="Staging"></th>
+          <th class="stage"><img src="/images/alpha.png" alt="Alpha"></th>
+          <th class="stage"><img src="/images/beta.png" alt="Beta"></th>
+          <th class="stage"><img src="/images/released.png" alt="Released"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @features.each do |feature| %>
+          <tr>
+            <td>
+              <span class="feature">
+                <span class="status"></span>
+                <span class="name"><%= feature.name %></span>
+              </span>
+            </td>
+            <td><%= feature.person %></td>
+            <td><%= feature.importance %></td>
+            <td><%= feature.target %></td>
+            <td><% if feature.stage == 0 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+            <td><% if feature.stage == 1 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+            <td><% if feature.stage == 2 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+            <td><% if feature.stage == 3 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+            <td><% if feature.stage == 4 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+            <td><% if feature.stage == 5 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+            <td><% if feature.stage == 6 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>TOTAL: <%= @features.size %></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td><%= @features.select{|feature| feature.stage == 0 }.count %></td>
+          <td><%= @features.select{|feature| feature.stage == 1 }.count %></td>
+          <td><%= @features.select{|feature| feature.stage == 2 }.count %></td>
+          <td><%= @features.select{|feature| feature.stage == 3 }.count %></td>
+          <td><%= @features.select{|feature| feature.stage == 4 }.count %></td>
+          <td><%= @features.select{|feature| feature.stage == 5 }.count %></td>
+          <td><%= @features.select{|feature| feature.stage == 6 }.count %></td>
+        </tr>
+      </tfoot>
+    </table>
+  </body>
+</html>
