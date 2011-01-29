@@ -9,6 +9,16 @@ class MasterPlan < Sinatra::Base
     erb :index
   end
 
+  get "/features" do
+    @features = @plan.features.sort_by(&:position)
+    @features.to_json
+  end
+
+  get "/features/:id" do
+    @feature = @plan.features.get(params[:id])
+    @feature.to_json
+  end
+
 end
 
 

@@ -10,48 +10,54 @@
     <![endif]-->
     <script src="/javascripts/json2.js" type="text/javascript" charset="utf-8"></script>
     <script src="/javascripts/jquery-1.4.4.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/jquery-ui-1.8.9.custom.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/javascripts/underscore.js" type="text/javascript" charset="utf-8"></script>
     <script src="/javascripts/backbone.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/backbone.rails.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/jquery.mustache.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/models.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/controllers.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/views.js" type="text/javascript" charset="utf-8"></script>
     <script src="/javascripts/masterplan.js" type="text/javascript" charset="utf-8"></script>
   </head>
   <body>
     <h1><img src="/images/logo.png" alt="Master Plan"></h1>
-    <table>
+    <table id="feature-list">
       <thead>
-        <tr>
-          <th id="feature">&nbsp;</th>
-          <th id="person"><img src="/images/person.png" alt="Person"></th>
-          <th id="importance"><img src="/images/importance.png" alt="Importance"></th>
-          <th id="target"><img src="/images/target.png" alt="Target Date"></th>
+        <tr class="nodrag">
+          <th class="name">&nbsp;</th>
+          <th class="person"><img src="/images/person.png" alt="Person"></th>
+          <th class="importance"><img src="/images/importance.png" alt="Importance"></th>
+          <th class="target"><img src="/images/target.png" alt="Target Date"></th>
           <th class="stage"><img src="/images/waiting.png" alt="Waiting"></th>
           <th class="stage"><img src="/images/started.png" alt="Started"></th>
           <th class="stage"><img src="/images/qa.png" alt="QA"></th>
           <th class="stage"><img src="/images/staging.png" alt="Staging"></th>
-          <th class="stage"><img src="/images/alpha.png" alt="Alpha"></th>
-          <th class="stage"><img src="/images/beta.png" alt="Beta"></th>
+          <th class="stage">&alpha;</th>
+          <th class="stage">&beta;</th>
           <th class="stage"><img src="/images/released.png" alt="Released"></th>
         </tr>
       </thead>
       <tbody>
         <% if @features.any? %>
           <% @features.each do |feature| %>
-            <tr>
-              <td>
+            <tr data-id="<%= feature.id %>">
+              <td class="name">
                 <span class="feature">
-                  <span class="status"></span>
-                  <span class="name"><%= feature.name %></span>
+                  <span class="feature-status"></span>
+                  <span class="feature-name"><%= feature.name %></span>
                 </span>
               </td>
-              <td><%= feature.person %></td>
-              <td><%= feature.importance %></td>
-              <td><%= feature.target %></td>
-              <td><% if feature.stage == 0 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-              <td><% if feature.stage == 1 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-              <td><% if feature.stage == 2 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-              <td><% if feature.stage == 3 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-              <td><% if feature.stage == 4 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-              <td><% if feature.stage == 5 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
-              <td><% if feature.stage == 6 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td class="person"><%= feature.person %></td>
+              <td class="importance"><%= feature.importance %></td>
+              <td class="target"><%= feature.target %></td>
+              <td class="stage stage-0"><% if feature.stage == 0 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td class="stage stage-1"><% if feature.stage == 1 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td class="stage stage-2"><% if feature.stage == 2 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td class="stage stage-3"><% if feature.stage == 3 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td class="stage stage-4"><% if feature.stage == 4 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td class="stage stage-5"><% if feature.stage == 5 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
+              <td class="stage stage-6"><% if feature.stage == 6 %><img src="/images/stage.png" alt="Current stage"><% end %></td>
             </tr>
           <% end %>
         <% else %>
@@ -61,18 +67,18 @@
         <% end %>
       </tbody>
       <tfoot>
-        <tr>
-          <td>TOTAL: <%= @features.size %></td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td><%= @features.select{|feature| feature.stage == 0 }.count %></td>
-          <td><%= @features.select{|feature| feature.stage == 1 }.count %></td>
-          <td><%= @features.select{|feature| feature.stage == 2 }.count %></td>
-          <td><%= @features.select{|feature| feature.stage == 3 }.count %></td>
-          <td><%= @features.select{|feature| feature.stage == 4 }.count %></td>
-          <td><%= @features.select{|feature| feature.stage == 5 }.count %></td>
-          <td><%= @features.select{|feature| feature.stage == 6 }.count %></td>
+        <tr class="nodrag">
+          <td class="name">TOTAL: <%= @features.size %></td>
+          <td class="person">&nbsp;</td>
+          <td class="importance">&nbsp;</td>
+          <td class="target">&nbsp;</td>
+          <td class="stage stage-0"><%= @features.select{|feature| feature.stage == 0 }.count %></td>
+          <td class="stage stage-1"><%= @features.select{|feature| feature.stage == 1 }.count %></td>
+          <td class="stage stage-2"><%= @features.select{|feature| feature.stage == 2 }.count %></td>
+          <td class="stage stage-3"><%= @features.select{|feature| feature.stage == 3 }.count %></td>
+          <td class="stage stage-4"><%= @features.select{|feature| feature.stage == 4 }.count %></td>
+          <td class="stage stage-5"><%= @features.select{|feature| feature.stage == 5 }.count %></td>
+          <td class="stage stage-6"><%= @features.select{|feature| feature.stage == 6 }.count %></td>
         </tr>
       </tfoot>
     </table>
