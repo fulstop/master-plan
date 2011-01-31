@@ -37,8 +37,7 @@ class MasterPlan < Sinatra::Base
   end
 
   delete "/features/:id" do
-    @feature = @plan.features.get(params[:id])
-    @feature.destroy
+    @feature = @plan.features.destroy(params[:id])
   end
 
 end
