@@ -1,4 +1,5 @@
 * { font-family: Helvetica, arial, sans-serif; }
+body { padding-bottom: 50px; }
 h1 { width: 95%; margin: 50px auto 20px; }
 table { width: 95%; border-collapse: separate; border-spacing: 0; margin: 0 auto; }
 table th,
@@ -12,11 +13,22 @@ tbody td { border-top: 1px solid #ccc; border-left: 1px solid #000; }
 tbody tr:first-child td { border-top: 2px solid #000; }
 tfoot td { border-top: 4px solid #000; }
 td:first-child { text-align: left; border-left: 0; }
-.feature { position: relative; display: block; padding-left: 10px; margin: 2px 2px 2px 0; background: #fafafa; }
-.feature .feature-status { width: 4px; height: 100%; background: #ccc; position: absolute; left: 0; }
-.feature.active { background: #fff5e5; }
-.feature.active .feature-status { background: #f90; }
-.feature.released { background: #e5ffe5; }
-.feature.released .feature-status { background: #0f0; }
+.feature { position: relative; display: block; padding-left: 10px; padding-right: 20px; margin: 2px 2px 2px 0; background: #fafafa; }
+.feature .icon { position: absolute; top: 8px; }
+.feature .handle { right: 8px; width: 10px; height: 13px; background: transparent url("/images/handle.png") no-repeat 0 0; cursor: move; }
+.feature .delete { right: 5px; width: 16px; height: 16px; background: transparent url("/images/delete.png") no-repeat 0 0; cursor: pointer; display: none; }
+.editing .feature .handle { display: none; }
+.editing .feature .delete { display: block; }
+.feature .status { width: 4px; height: 100%; background: #ccc; position: absolute; left: 0; }
+tr.active .feature { background: #fff5e5; }
+tr.active .status { background: #f90; }
+tr.released .feature { background: #e5ffe5; }
+tr.released .status { background: #0f0; }
+.edit input { width: 100%; padding: 0; margin: 0; border: 0; border-bottom: 1px dotted #000; background: transparent; outline: 0; font-size: 14px; }
+.person .edit input { text-transform: uppercase; text-align: center; }
+.target .edit input { text-align: center; }
 #no-plans { text-align: center; padding: 20px; background: #fafafa; }
 table tr.ui-sortable-helper td { border: 1px solid #ccc; border-width: 1px 0; }
+#confirm-box { width: 340px; padding: 20px; position: absolute; left: 50%; top: 200px; margin-left: -200px; background: #000; color: #fff; text-align: center; border: 10px solid #eee; }
+#confirm-box p { margin: 1em 0; }
+#confirm-box a { border-bottom: 1px dotted #fff; cursor: pointer; }

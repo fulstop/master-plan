@@ -5,18 +5,38 @@ class MasterPlan < Sinatra::Base
   end
 
   get "/" do
-    @features = @plan.features.sort_by(&:position)
+    @features = @plan.features.compact.sort_by(&:position).reverse
     erb :index
   end
 
-  get "/features" do
-    @features = @plan.features.sort_by(&:position)
-    @features.to_json
+  post "/features" do
+    @feature = @plan.features.create(JSON.parse(request.body.read))
+    @feature.to_json
+  end
+
+  put "/features" do
+    ids = JSON.parse(request.body.read)
+    ids.reverse.each_with_index do |id, i|
+      feature = @plan.features.get(id)
+      feature.position = i
+      feature.save
+    end
   end
 
   get "/features/:id" do
     @feature = @plan.features.get(params[:id])
     @feature.to_json
+  end
+
+  put "/features/:id" do
+    @feature = @plan.features.get(params[:id])
+    @feature.attributes = JSON.parse(request.body.read)
+    @feature.save
+  end
+
+  delete "/features/:id" do
+    @feature = @plan.features.get(params[:id])
+    @feature.destroy
   end
 
 end
@@ -44,9 +64,11 @@ class Feature
 
   attribute :position, Integer, :default => 0
   attribute :person, String
-  attribute :importance, Integer
-  attribute :target, Date
+  attribute :importance, Integer, :default => 3
+  attribute :target, String
   attribute :stage, Integer, :default => 0
   attribute :released, Date
 
 end
+
+Feature.include_root_in_json = false
