@@ -5,7 +5,7 @@ class MasterPlan < Sinatra::Base
   end
 
   get "/" do
-    @features = @plan.features.compact.sort_by(&:position)
+    @features = @plan.features.sort_by(&:position)
     erb :index
   end
 
@@ -18,10 +18,8 @@ class MasterPlan < Sinatra::Base
     ids = JSON.parse(request.body.read)
     ids.each_with_index do |id, i|
       feature = @plan.features.get(id)
-      if feature
-        feature.position = i
-        feature.save
-      end
+      feature.position = i
+      feature.save
     end
   end
 
