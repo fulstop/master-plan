@@ -66,7 +66,6 @@ class Feature
   attribute :importance, Integer, :default => 3
   attribute :target, String
   attribute :stage, Integer, :default => 0
-  attribute :released, Date
 
 end
 
