@@ -66,7 +66,12 @@
 
     <script id="stats" type="text/html" charset="utf-8">
       <tr class="nodrag">
-        <td class="name">TOTAL: {{feature_count}}</td>
+        <td class="name">
+          <span class="count">TOTAL: {{feature_count}}</span>
+          <a class="icon" id="add"><span>ADD</span></a>
+          <a class="icon" id="remove"><span>REMOVE</span></a>
+          <a class="icon" id="done" style="display:none"><span>DONE</span></a>
+        </td>
         <td class="person">&nbsp;</td>
         <td class="importance">&nbsp;</td>
         <td class="target">&nbsp;</td>

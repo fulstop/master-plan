@@ -1,7 +1,7 @@
 var Feature = Backbone.Model.extend({
 
   initialize: function(){
-    this.view = new FeatureView({ model: this, id: this.id })
+    this.view = new FeatureView({ model: this, id: this.get("id") })
   }
 
 });
@@ -11,7 +11,16 @@ var FeatureList = Backbone.Collection.extend({
 
   model: Feature,
 
-  url: '/features'
+  url: '/features',
+
+  nextPosition: function() {
+    if (!this.length) return 0;
+    return this.last().get('position') + 1;
+  },
+
+  comparator: function(feature) {
+    return feature.get('position');
+  }
 
 });
 
@@ -31,7 +40,7 @@ var FeatureView = Backbone.View.extend({
     "dblclick .value": "edit",
     "click .delete": "confirmDelete",
     "keyup :input": "checkKey",
-    // "blur :input": "finishEdit",
+    "blur :input": "finishEdit",
     "keyup .person :input": "upcaseInitials"
   },
 
@@ -62,6 +71,7 @@ var FeatureView = Backbone.View.extend({
   },
 
   edit: function(e){
+    if ($(this.el).is(".deleting")) return
     if ($(e.target).is(".value")) {
       $(e.target).hide().siblings(".edit").show().children(":input").focus();
     } else {
@@ -75,7 +85,7 @@ var FeatureView = Backbone.View.extend({
       this.finishEdit();
   },
 
-  finishEdit: function(){
+  finishEdit: function(e){
     this.model.save(this.$(":input").serializeObject());
     this.$(".edit").hide().each(function(){
       $(this).siblings(".value").text($(this).children(":input").val()).show();
@@ -83,7 +93,7 @@ var FeatureView = Backbone.View.extend({
     $(this.el).removeClass("editing");
   },
 
-  confirmDelete: function(e){
+  confirmDelete: function(){
     new ConfirmationView({ text: "Are you sure you'd like to delete this feature?", onYes: this.deleteFeature });
   },
 
@@ -97,7 +107,7 @@ var FeatureView = Backbone.View.extend({
 var ConfirmationView = Backbone.View.extend({
 
   initialize: function(){
-    _.bindAll(this, 'close', 'render');
+    _.bindAll(this, 'keyPressed', 'close', 'render');
     this.render();
   },
 
@@ -111,7 +121,15 @@ var ConfirmationView = Backbone.View.extend({
   render: function(){
     $(this.el).html(ich.confirmation({ text: this.options["text"] }));
     $("body").append(this.el);
+    $(window).keyup(this.keyPressed);
     return this;
+  },
+
+  keyPressed: function(e){
+    if (e.which == 13)
+      this.yes();
+    if (e.which == 27)
+      this.no();
   },
 
   yes: function(){
@@ -124,6 +142,7 @@ var ConfirmationView = Backbone.View.extend({
   },
 
   close: function(){
+    $(window).unbind("keyup");
     $(this.el).remove();
   }
 
@@ -170,6 +189,12 @@ $(function(){
       });
     },
 
+    events: {
+      "click #add": "newFeature",
+      "click #remove": "enterRemoveMode",
+      "click #done": "leaveRemoveMode"
+    },
+
     render: function(){
       this.$("tfoot").html(ich.stats({
         feature_count: Features.models.length,
@@ -181,6 +206,11 @@ $(function(){
         stage_5_count: Features.filter(function(feature){ return feature.get("stage") == 5 }).length,
         stage_6_count: Features.filter(function(feature){ return feature.get("stage") == 6 }).length
       }));
+      if (this.removeMode) {
+        this.enterRemoveMode();
+      } else {
+        this.leaveRemoveMode();
+      }
     },
 
     addOne: function(feature){
@@ -195,6 +225,30 @@ $(function(){
     removeOne: function(feature) {
       $(feature.view.el).remove();
       this.render();
+    },
+
+    newFeature: function(){
+      Features.create({ name: "New feature", position: Features.nextPosition() }, {
+        success: function(model){
+          $(model.view.el).attr("id", model.get("id"));
+          model.view.render();
+          $(model.view.el).find(".feature .value").trigger("dblclick");
+        }
+      });
+    },
+
+    enterRemoveMode: function(){
+      this.removeMode = true;
+      this.$("tbody tr").removeClass("editing").addClass("deleting");
+      this.$("tfoot .name .icon").hide();
+      this.$("tfoot .name a#done").show();
+    },
+
+    leaveRemoveMode: function(){
+      this.removeMode = false;
+      this.$("tbody tr").removeClass("deleting");
+      this.$("tfoot .name .icon").show();
+      this.$("tfoot .name a#done").hide();
     }
 
   });
