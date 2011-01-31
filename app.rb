@@ -9,6 +9,10 @@ class MasterPlan < Sinatra::Base
     erb :index
   end
 
+  get "/features" do
+    @plan.features.to_json
+  end
+
   post "/features" do
     @feature = @plan.features.create(JSON.parse(request.body.read))
     @feature.to_json

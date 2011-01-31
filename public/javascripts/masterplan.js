@@ -31,7 +31,7 @@ var FeatureView = Backbone.View.extend({
 
   initialize: function(){
     _.bindAll(this, 'deleteFeature', 'render');
-    this.model.bind('change:stage', this.render);
+    this.model.bind('change', this.render);
   },
 
   events: {
@@ -159,7 +159,7 @@ $(function(){
       _.bindAll(this, "addOne", "addAll", "removeOne", "render");
 
       Features.bind("add", this.addOne);
-      Features.bind('refresh', this.addAll);
+      Features.bind("refresh", this.addAll);
       Features.bind("change:stage", this.render);
       Features.bind("remove", this.removeOne);
 
@@ -214,7 +214,11 @@ $(function(){
     },
 
     addOne: function(feature){
-      $(this.el).append(feature.view.render().el);
+      if ($("#"+feature.get("id")).length == 1) {
+        $("#"+feature.get("id")+":not(.editing)").replaceWith(feature.view.render().el);
+      } else {
+        $(this.el).append(feature.view.render().el);
+      }
       this.render();
     },
 
@@ -254,5 +258,9 @@ $(function(){
   });
 
   window.MasterPlan = new MasterPlanView;
+
+  setInterval(function() {
+    Features.fetch();
+  }, 10000);
 
 });
