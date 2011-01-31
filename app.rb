@@ -41,10 +41,43 @@ class MasterPlan < Sinatra::Base
 end
 
 
+class MasterPlan
+  module Config
+
+    mattr_accessor :settings
+
+    def self.load!
+      begin
+        config = YAML.load_file("#{File.dirname(__FILE__)}/config/app.yml")[ENV['RACK_ENV'] || "development"]
+      rescue Errno::ENOENT
+        config = {}
+      ensure
+        self.settings = config.with_indifferent_access
+      end
+    end
+
+    def self.[](key)
+      settings[key.to_s]
+    end
+
+  end
+
+  module Redis
+
+    def self.connection
+      @connection ||= ::Redis.connect(:url => MasterPlan::Config[:redis_url])
+    end
+
+  end
+end
+
+MasterPlan::Config.load!
+
+
 class Plan
 
   include Toy::Store
-  store :redis, Redis.new
+  store :redis, MasterPlan::Redis.connection
 
   attribute :name, String
   index :name
@@ -56,7 +89,7 @@ end
 class Feature
 
   include Toy::Store
-  store :redis, Redis.new
+  store :redis, MasterPlan::Redis.connection
 
   attribute :name, String
   validates_presence_of :name
