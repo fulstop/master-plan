@@ -259,8 +259,4 @@ $(function(){
 
   window.MasterPlan = new MasterPlanView;
 
-  setInterval(function() {
-    Features.fetch();
-  }, 10000);
-
 });
