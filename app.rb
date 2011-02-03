@@ -10,7 +10,7 @@ class MasterPlan < Sinatra::Base
   end
 
   get "/features" do
-    @plan.features.to_json
+    @plan.features.sort_by(&:position).to_json
   end
 
   post "/features" do
