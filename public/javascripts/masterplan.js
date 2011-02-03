@@ -1,10 +1,4 @@
-var Feature = Backbone.Model.extend({
-
-  initialize: function(){
-    this.view = new FeatureView({ model: this, id: this.get("id") })
-  }
-
-});
+var Feature = Backbone.Model.extend();
 
 
 var FeatureList = Backbone.Collection.extend({
@@ -30,8 +24,10 @@ var Features = new FeatureList;
 var FeatureView = Backbone.View.extend({
 
   initialize: function(){
-    _.bindAll(this, 'deleteFeature', 'render');
+    _.bindAll(this, 'featureMenu', 'deleteFeature', 'render');
     this.model.bind('change', this.render);
+    this.model.view = this;
+    this.render();
   },
 
   events: {
@@ -41,7 +37,8 @@ var FeatureView = Backbone.View.extend({
     "click .delete": "confirmDelete",
     "keyup :input": "checkKey",
     "blur :input": "finishEdit",
-    "keyup .person :input": "upcaseInitials"
+    "keyup .person :input": "upcaseInitials",
+    "contextmenu": "featureMenu"
   },
 
   tagName: "tr",
@@ -71,7 +68,8 @@ var FeatureView = Backbone.View.extend({
   },
 
   edit: function(e){
-    if ($(this.el).is(".deleting")) return
+    if ($(this.el).is(".deleting")) return;
+    this.editMode = true;
     if ($(e.target).is(".value")) {
       $(e.target).hide().siblings(".edit").show().children(":input").focus();
     } else {
@@ -86,6 +84,11 @@ var FeatureView = Backbone.View.extend({
   },
 
   finishEdit: function(e){
+    if (this.editMode == false) {
+      return true;
+    } else {
+      this.editMode = false;
+    }
     this.model.save(this.$(":input").serializeObject());
     this.$(".edit").hide().each(function(){
       $(this).siblings(".value").text($(this).children(":input").val()).show();
@@ -100,6 +103,17 @@ var FeatureView = Backbone.View.extend({
   deleteFeature: function(){
     this.model.destroy();
     Features.remove(this.model);
+  },
+
+  featureMenu: function(e){
+    if (e.metaKey) {
+      if (MasterPlan.removeMode) {
+        MasterPlan.leaveRemoveMode();
+      } else {
+        MasterPlan.enterRemoveMode();
+      }
+      return false;
+    }
   }
 
 });
@@ -122,6 +136,7 @@ var ConfirmationView = Backbone.View.extend({
     $(this.el).html(ich.confirmation({ text: this.options["text"] }));
     $("body").append(this.el);
     $(window).keyup(this.keyPressed);
+    $(window).unbind("keyup", MasterPlan.keyPressed);
     return this;
   },
 
@@ -142,7 +157,8 @@ var ConfirmationView = Backbone.View.extend({
   },
 
   close: function(){
-    $(window).unbind("keyup");
+    $(window).unbind("keyup", this.keyPressed);
+    $(window).keyup(MasterPlan.keyPressed);
     $(this.el).remove();
   }
 
@@ -155,13 +171,14 @@ $(function(){
 
     el: $("#feature-list"),
 
+    removeMode: false,
+
     initialize: function(){
-      _.bindAll(this, "addOne", "addAll", "removeOne", "render");
+      _.bindAll(this, "addOne", "addAll", "removeOne", "render", "keyPressed");
 
       Features.bind("add", this.addOne);
-      Features.bind("refresh", this.addAll);
-      Features.bind("change:stage", this.render);
       Features.bind("remove", this.removeOne);
+      Features.bind("change:stage", this.render);
 
       this.render();
 
@@ -187,6 +204,8 @@ $(function(){
           });
         }
       });
+
+      $(window).keyup(this.keyPressed);
     },
 
     events: {
@@ -214,11 +233,8 @@ $(function(){
     },
 
     addOne: function(feature){
-      if ($("#"+feature.get("id")).length == 1) {
-        $("#"+feature.get("id")+":not(.editing)").replaceWith(feature.view.render().el);
-      } else {
-        $(this.el).append(feature.view.render().el);
-      }
+      var view = new FeatureView({ model: feature, id: feature.get("id") });
+      this.$("tbody").append(view.el);
       this.render();
     },
 
@@ -234,8 +250,6 @@ $(function(){
     newFeature: function(){
       Features.create({ name: "New feature", position: Features.nextPosition() }, {
         success: function(model){
-          $(model.view.el).attr("id", model.get("id"));
-          model.view.render();
           $(model.view.el).find(".feature .value").trigger("dblclick");
         }
       });
@@ -253,6 +267,14 @@ $(function(){
       this.$("tbody tr").removeClass("deleting");
       this.$("tfoot .name .icon").show();
       this.$("tfoot .name a#done").hide();
+    },
+
+    keyPressed: function(e){
+      if (this.removeMode) {
+        if (e.which == 69 || e.which == 27) this.leaveRemoveMode();
+      } else {
+        if (e.which == 69) this.enterRemoveMode();
+      }
     }
 
   });

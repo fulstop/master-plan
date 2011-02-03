@@ -88,6 +88,11 @@
     <script type="text/javascript" charset="utf-8">
       $(function(){
         Features.refresh(<%= @features.to_json %>);
+        if (Features.any()) {
+          MasterPlan.addAll();
+        } else {
+          MasterPlan.newFeature();
+        }
       });
     </script>
   </head>
