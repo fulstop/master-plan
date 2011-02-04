@@ -93,10 +93,10 @@ var FeatureView = Backbone.View.extend({
   },
 
   finishEdit: function(){
-    if (MasterPlan.editMode == false) {
-      return true;
-    } else {
+    if (MasterPlan.editMode) {
       MasterPlan.editMode = false;
+    } else {
+      return true;
     }
     this.model.save(this.$(":input").serializeObject());
     this.$(".edit").hide().each(function(){
@@ -146,8 +146,8 @@ var ConfirmationView = Backbone.View.extend({
   render: function(){
     $(this.el).html(ich.confirmation({ text: this.options["text"] }));
     $("body").append(this.el);
-    $(window).keyup(this.keyPressed);
-    $(window).unbind("keyup", MasterPlan.keyPressed);
+    $(window).keydown(this.keyPressed);
+    $(window).unbind("keydown", MasterPlan.keyPressed);
     return this;
   },
 
@@ -168,8 +168,8 @@ var ConfirmationView = Backbone.View.extend({
   },
 
   close: function(){
-    $(window).unbind("keyup", this.keyPressed);
-    $(window).keyup(MasterPlan.keyPressed);
+    $(window).unbind("keydown", this.keyPressed);
+    $(window).keydown(MasterPlan.keyPressed);
     $(this.el).remove();
   }
 
@@ -287,25 +287,25 @@ $(function(){
       if (index <= 0) {
         index = Features.length - 1;
       } else {
-        index -= 1
+        index -= 1;
       }
       Features.updateSelection(Features.at(index));
     },
 
     moveSelectionDown: function(){
-      index = Features.models.indexOf(Features.selection);
+      index = Features.indexOf(Features.selection);
       if (index >= Features.length - 1) {
         index = 0;
       } else {
-        index += 1
+        index += 1;
       }
       Features.updateSelection(Features.at(index));
     },
 
     keyPressed: function(e){
       if (!this.editMode) {
-        if (e.which == 38 || e.which == 74) { this.moveSelectionUp(); } // up or j
-        if (e.which == 40 || e.which == 75) { this.moveSelectionDown(); } // down or k
+        if (e.which == 75 || e.which == 188) { this.moveSelectionUp(); } // k or ,
+        if (e.which == 74 || e.which == 190) { this.moveSelectionDown(); } // j or .
       }
       if (this.removeMode) {
         if (e.which == 69 || e.which == 27 || e.which == 13) { this.leaveRemoveMode(); } // e, esc, or enter
