@@ -14,7 +14,7 @@ tbody tr:first-child td { border-top: 2px solid #000; }
 tfoot td { border-top: 4px solid #000; }
 td:first-child { text-align: left; border-left: 0; }
 tr .selection { display: none; }
-tr.selected .selection { display: block; position: absolute; left: 0; top: 0; }
+tr.selected .selection { display: block; position: absolute; left: -10px; top: 0; font-size: 1.4em; }
 .feature { position: relative; display: block; padding-left: 10px; padding-right: 20px; margin: 2px 2px 2px 0; background: #fafafa; }
 .feature .handle { position: absolute; top: 10px; right: 8px; width: 10px; height: 10px; background: transparent url("/images/handle.png") no-repeat 0 0; cursor: move; }
 .feature .delete { position: absolute; top: 8px; right: 5px; width: 16px; height: 16px; background: transparent url("/images/delete.png") no-repeat 0 0; cursor: pointer; display: none; }
