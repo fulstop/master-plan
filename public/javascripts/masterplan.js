@@ -12,6 +12,14 @@ var FeatureList = Backbone.Collection.extend({
     return this.last().get('position') + 1;
   },
 
+  updateSelection: function(feature){
+    this.selection = feature;
+    $("tr").removeClass("selected");
+    $(feature.view.el).addClass("selected");
+  },
+
+  selection: null,
+
   comparator: function(feature) {
     return feature.get('position');
   }
@@ -24,7 +32,7 @@ var Features = new FeatureList;
 var FeatureView = Backbone.View.extend({
 
   initialize: function(){
-    _.bindAll(this, 'featureMenu', 'deleteFeature', 'render');
+    _.bindAll(this, 'checkKey', 'featureMenu', 'deleteFeature', 'render');
     this.model.bind('change', this.render);
     this.model.view = this;
     this.render();
@@ -35,7 +43,6 @@ var FeatureView = Backbone.View.extend({
     "dblclick td:not(.stage)": "edit",
     "dblclick .value": "edit",
     "click .delete": "confirmDelete",
-    "keyup :input": "checkKey",
     "blur :input": "finishEdit",
     "keyup .person :input": "upcaseInitials",
     "contextmenu": "featureMenu"
@@ -69,7 +76,8 @@ var FeatureView = Backbone.View.extend({
 
   edit: function(e){
     if ($(this.el).is(".deleting")) return;
-    this.editMode = true;
+    MasterPlan.editMode = true;
+    $(window).keydown(this.checkKey);
     if ($(e.target).is(".value")) {
       $(e.target).hide().siblings(".edit").show().children(":input").focus();
     } else {
@@ -83,17 +91,18 @@ var FeatureView = Backbone.View.extend({
       this.finishEdit();
   },
 
-  finishEdit: function(e){
-    if (this.editMode == false) {
+  finishEdit: function(){
+    if (MasterPlan.editMode == false) {
       return true;
     } else {
-      this.editMode = false;
+      MasterPlan.editMode = false;
     }
     this.model.save(this.$(":input").serializeObject());
     this.$(".edit").hide().each(function(){
       $(this).siblings(".value").text($(this).children(":input").val()).show();
     });
     $(this.el).removeClass("editing");
+    $(window).unbind("keydown", this.checkKey);
   },
 
   confirmDelete: function(){
@@ -101,6 +110,7 @@ var FeatureView = Backbone.View.extend({
   },
 
   deleteFeature: function(){
+    MasterPlan.moveSelectionDown();
     this.model.destroy();
     Features.remove(this.model);
   },
@@ -172,6 +182,7 @@ $(function(){
     el: $("#feature-list"),
 
     removeMode: false,
+    editMode: false,
 
     initialize: function(){
       _.bindAll(this, "addOne", "addAll", "removeOne", "render", "keyPressed");
@@ -251,6 +262,7 @@ $(function(){
       Features.create({ name: "New feature", position: Features.nextPosition() }, {
         success: function(model){
           $(model.view.el).find(".feature .value").trigger("dblclick");
+          if (Features.length == 1) Features.updateSelection(Features.first());
         }
       });
     },
@@ -269,11 +281,37 @@ $(function(){
       this.$("tfoot .name a#done").hide();
     },
 
-    keyPressed: function(e){
-      if (this.removeMode) {
-        if (e.which == 69 || e.which == 27) this.leaveRemoveMode();
+    moveSelectionUp: function(){
+      index = Features.models.indexOf(Features.selection);
+      if (index <= 0) {
+        index = Features.length - 1;
       } else {
-        if (e.which == 69) this.enterRemoveMode();
+        index -= 1
+      }
+      Features.updateSelection(Features.at(index));
+    },
+
+    moveSelectionDown: function(){
+      index = Features.models.indexOf(Features.selection);
+      if (index >= Features.length - 1) {
+        index = 0;
+      } else {
+        index += 1
+      }
+      Features.updateSelection(Features.at(index));
+    },
+
+    keyPressed: function(e){
+      if (!this.editMode) {
+        if (e.which == 38 || e.which == 74) { this.moveSelectionUp(); }   // up or j
+        if (e.which == 40 || e.which == 75) { this.moveSelectionDown(); } // down or k
+      }
+      if (this.removeMode) {
+        if (e.which == 69 || e.which == 27 || e.which == 13) { this.leaveRemoveMode(); }   // e or esc
+        if (e.which == 88) { Features.selection.view.confirmDelete(); }   // x
+      } else if (!this.editMode) {
+        if (e.which == 69 || e.which == 27 || e.which == 88) { this.enterRemoveMode(); } // x, e or esc
+        if (e.which == 78) { this.newFeature(); }                         // n
       }
     }
 
