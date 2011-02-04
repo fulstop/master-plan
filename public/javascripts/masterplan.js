@@ -87,8 +87,9 @@ var FeatureView = Backbone.View.extend({
   },
 
   checkKey: function(e){
-    if (e.which == 13 || e.which == 27)
+    if (e.which == 13 || e.which == 27) {
       this.finishEdit();
+    }
   },
 
   finishEdit: function(){
@@ -216,7 +217,7 @@ $(function(){
         }
       });
 
-      $(window).keyup(this.keyPressed);
+      $(window).keydown(this.keyPressed);
     },
 
     events: {
@@ -303,15 +304,16 @@ $(function(){
 
     keyPressed: function(e){
       if (!this.editMode) {
-        if (e.which == 38 || e.which == 74) { this.moveSelectionUp(); }   // up or j
+        if (e.which == 38 || e.which == 74) { this.moveSelectionUp(); } // up or j
         if (e.which == 40 || e.which == 75) { this.moveSelectionDown(); } // down or k
       }
       if (this.removeMode) {
-        if (e.which == 69 || e.which == 27 || e.which == 13) { this.leaveRemoveMode(); }   // e or esc
-        if (e.which == 88) { Features.selection.view.confirmDelete(); }   // x
+        if (e.which == 69 || e.which == 27 || e.which == 13) { this.leaveRemoveMode(); } // e, esc, or enter
+        if (e.which == 88) { Features.selection.view.confirmDelete(); } // x
       } else if (!this.editMode) {
         if (e.which == 69 || e.which == 27 || e.which == 88) { this.enterRemoveMode(); } // x, e or esc
-        if (e.which == 78) { this.newFeature(); }                         // n
+        if (e.which == 13) { $(Features.selection.view.el).find(".value").first().trigger("dblclick"); } // enter
+        if (e.which == 78) { this.newFeature(); } // n
       }
     }
 
