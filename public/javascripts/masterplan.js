@@ -114,6 +114,7 @@ var FeatureView = Backbone.View.extend({
     MasterPlan.moveSelectionDown();
     this.model.destroy();
     Features.remove(this.model);
+    MasterPlan.leaveRemoveMode();
   },
 
   featureMenu: function(e){
