@@ -8,6 +8,13 @@ thead th { padding: 4px 0; border: 2px solid #000; border-width: 2px 0; line-hei
 th.person,
 th.importance,
 th.stage { width: 70px; }
+th#stage-0 { border-top-color: #ccc; background-color: #fafafa; }
+th#stage-1 { border-top-color: yellow; background-color: #fffded; }
+th#stage-2 { border-top-color: #f90; background-color: #fff5e5; }
+th#stage-3 { border-top-color: #f90; background-color: #fff5e5; }
+th#stage-4 { border-top-color: red; background-color: #fdd; }
+th#stage-5 { border-top-color: red; background-color: #fdd; }
+th#stage-6 { border-top-color: #0f0; background-color: #e5ffe5; }
 th.target { width: 140px; }
 tbody td { border-top: 1px solid #ccc; border-left: 1px solid #000; }
 tbody tr:first-child td { border-top: 2px solid #000; }
@@ -22,8 +29,12 @@ tr.selected .selection { display: block; position: absolute; left: -10px; top: 0
 .deleting .feature .handle { display: none; }
 .deleting .feature .delete { display: block; }
 .feature .status { width: 4px; height: 100%; background: #ccc; position: absolute; left: 0; }
-tr.active .feature { background: #fff5e5; }
-tr.active .status { background: #f90; }
+tr.active .feature { background: #fffded; }
+tr.active .status { background: yellow; }
+tr.testing .feature { background: #fff5e5; }
+tr.testing .status { background: #f90; }
+tr.finished .feature { background: #fdd; }
+tr.finished .status { background: red; }
 tr.released .feature { background: #e5ffe5; }
 tr.released .status { background: #0f0; }
 .edit input { width: 100%; padding: 0; margin: 0; border: 0; border-bottom: 1px dotted #000; background: transparent; outline: 0; font-size: 14px; }

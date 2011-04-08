@@ -53,14 +53,16 @@ var FeatureView = Backbone.View.extend({
   render: function(){
     $(this.el).html(ich.feature(this.model.toJSON()));
 
-    $(this.el).removeClass("active").removeClass("released").children(".stage").html("");
+    $(this.el).removeClass("active testing finished released").children(".stage").html("");
     $(this.el).children(".stage:eq("+this.model.get("stage")+")").html('<img src="/images/stage.png" alt="Current stage">');
-    if (Number(this.model.get("stage")) == 6) {
-      $(this.el).addClass("released");
-    } else if (Number(this.model.get("stage")) > 0) {
-      $(this.el).addClass("active");
+    switch (Number(this.model.get("stage"))) {
+      case 1: $(this.el).addClass("active"); break;
+      case 2: $(this.el).addClass("testing"); break;
+      case 3: $(this.el).addClass("testing"); break;
+      case 4: $(this.el).addClass("finished"); break;
+      case 5: $(this.el).addClass("finished"); break;
+      case 6: $(this.el).addClass("released"); break;
     }
-
     $(this.el).find(".importance select").val($(this.el).find(".importance .value").text());
 
     return this;
