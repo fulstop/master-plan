@@ -304,16 +304,16 @@ $(function(){
 
     keyPressed: function(e){
       if (!this.editMode) {
-        if (e.which == 75 || e.which == 188) { this.moveSelectionUp(); } // k or ,
-        if (e.which == 74 || e.which == 190) { this.moveSelectionDown(); } // j or .
+        if (e.which == 75 || e.which == 188) { this.moveSelectionUp(); }                                 // k or ,
+        if (e.which == 74 || e.which == 190) { this.moveSelectionDown(); }                               // j or .
       }
       if (this.removeMode) {
-        if (e.which == 69 || e.which == 27 || e.which == 13) { this.leaveRemoveMode(); } // e, esc, or enter
-        if (e.which == 88) { Features.selection.view.confirmDelete(); } // x
+        if (e.which == 69 || e.which == 27 || e.which == 13) { this.leaveRemoveMode(); }                 // e, esc, or enter
+        if (e.which == 88) { Features.selection.view.confirmDelete(); }                                  // x
       } else if (!this.editMode) {
-        if (e.which == 69 || e.which == 27 || e.which == 88) { this.enterRemoveMode(); } // x, e or esc
+        if (e.which == 69 || e.which == 27 || e.which == 88) { this.enterRemoveMode(); }                 // x, e or esc
         if (e.which == 13) { $(Features.selection.view.el).find(".value").first().trigger("dblclick"); } // enter
-        if (e.which == 78) { this.newFeature(); } // n
+        if (e.which == 78) { this.newFeature(); }                                                        // n
       }
     }
 
