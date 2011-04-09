@@ -31,6 +31,16 @@ Keyboard Shortcuts
     esc         end editing
     x           delete feature
 
+Authentication
+--------------
+
+Maybe you don't want your master plan visible to the world? Right now, the easiest way to do that is by using HTTP basic authentication. Just create a password file using `htpasswd` and add an `.htaccess` file in the `public` directory:
+
+    AuthType Basic
+    AuthName "My Master Plan"
+    AuthUserFile /path/to/password/file
+    Require user me
+
 
 © 2011 Brandon Arbini.  
 Released under the [MIT license][mit].
