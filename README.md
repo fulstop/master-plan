@@ -14,7 +14,7 @@ At Zencoder we use [Pivotal Tracker][pivotal] to manage our development process.
 Technology
 ----------
 
-On the back-end, MASTERPLAN is a [Sinatra][sinatra] application using [Redis][redis] as the datastore through the [Toy Store][toystore] gem. All of the gem dependencies are managed with [Bundler][bundler] and specified in the Gemfile. On the front-end, MASTERPLAN is an HTML5  application using the [Backbone.js][backbone] MVC framework, [ICanHaz.js][icanhaz] with [Mustache.js][mustache] for templating, and [jQuery UI][jqueryui] for sorting magic.
+On the back-end, MASTERPLAN is a [Sinatra][sinatra] application using [Redis][redis] as the datastore through the [Toystore][toystore] gem. All of the gem dependencies are managed with [Bundler][bundler] and specified in the Gemfile. On the front-end, MASTERPLAN is an HTML5  application using the [Backbone.js][backbone] MVC framework, [ICanHaz.js][icanhaz] with [Mustache.js][mustache] for templating, and [jQuery UI][jqueryui] for sorting magic.
 
 Setup
 -----
