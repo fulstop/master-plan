@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MASTERPLAN.</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+    <style type="text/css" media="screen">
+      li.stage { padding-left: 40px !important; }
+      li.stage .ui-li-desc img { display: inline-block; margin-right: 4px; vertical-align: bottom; }
+      li.stage .ui-li-desc .detail { display: inline-block; opacity: 0.5; }
+      li.stage .detail.person { width: 60px; }
+      li.stage .detail.importance { width: 38px; }
+      .stage-mark { position: absolute; height: 100%; width: 24px; left: 0; top: 0; }
+      .stage-mark img { position: absolute; left: 50%; top: 50%; margin: -10px 0 0 -9px; }
+      .stage-0 .stage-mark { background-color: #ccc; border-color: #fafafa; }
+      .stage-1 .stage-mark { background-color: #fffded; border-right: 4px solid yellow; }
+      .stage-2 .stage-mark { background-color: #fff5e5; border-right: 4px solid #f90; }
+      .stage-3 .stage-mark { background-color: #fff5e5; border-right: 4px solid #f90; }
+      .stage-4 .stage-mark { background-color: #fdd; border-right: 4px solid red; }
+      .stage-5 .stage-mark { background-color: #fdd; border-right: 4px solid red; }
+      .stage-6 .stage-mark { background-color: #e5ffe5; border-right: 4px solid #0f0; }
+    </style>
+  </head>
+  <body>
+
+    <div data-role="page">
+      <div data-role="header">
+        <h1>MASTERPLAN.</h1>
+      </div>
+
+      <div data-role="content">
+        <ul data-role="listview" data-filter="true">
+          <% @features.each do |feature| %>
+            <li class="stage stage-<%= feature.stage %>">
+              <h3 class="ui-li-heading"><%= feature.name %></h3>
+              <span class="stage-mark"><img src="/images/<%= %w{waiting started qa staging alpha beta done}[feature.stage] %>.png" /></span>
+              <span class="ui-li-desc">
+                <span class="detail person"><img src="/images/person.png" /><%= feature.person %></span>
+                <span class="detail importance"><img src="/images/importance.png" /><%= feature.importance %></span>
+                <span class="detail target"><img src="/images/target.png" /><%= feature.target %></span>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div data-role="footer">
+        <h4><%= @features.size %> features</h4>
+      </div>
+    </div>
+
+  </body>
+</html>

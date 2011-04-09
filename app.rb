@@ -9,6 +9,11 @@ class MasterPlan < Sinatra::Base
     erb :index
   end
 
+  get "/m" do
+    @features = @plan.features.sort_by(&:position)
+    erb :mobile
+  end
+
   get "/features" do
     @plan.features.sort_by(&:position).to_json
   end
