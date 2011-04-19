@@ -25,10 +25,15 @@ td:first-child { text-align: left; border-left: 0; }
 tr .selection { display: none; }
 tr.selected .selection { display: block; position: absolute; left: -10px; top: 0; font-size: 1.4em; }
 .feature { position: relative; display: block; padding-left: 10px; padding-right: 20px; margin: 2px 2px 2px 0; background: #fafafa; }
-.feature .handle { position: absolute; top: 10px; right: 8px; width: 10px; height: 10px; cursor: move; }
+.feature .info { position: absolute; top: 8px; right: 22px; cursor: pointer; opacity: 0.6; display: none; }
+.feature .info img { width: 13px; height: 13px; }
+.feature:hover .info { display: block; }
+.feature .handle { position: absolute; top: 10px; right: 8px; cursor: move; }
 .feature .handle img { width: 10px; height: 10px; }
 .feature .delete { position: absolute; top: 8px; right: 5px; width: 16px; height: 16px; cursor: pointer; display: none; }
+.editing .feature .info { display: none; }
 .editing .feature .handle { display: none; }
+.deleting .feature .info { display: none; }
 .deleting .feature .handle { display: none; }
 .deleting .feature .delete { display: block; }
 .feature .status { width: 4px; height: 100%; background: #ccc; position: absolute; left: 0; }
@@ -48,6 +53,10 @@ table tr.ui-sortable-helper td { border: 1px solid #ccc; border-width: 1px 0; }
 #confirm-box { width: 340px; padding: 20px; position: fixed; left: 50%; top: 100px; margin-left: -200px; background: #000; color: #fff; text-align: center; border: 10px solid #eee; }
 #confirm-box p { margin: 1em 0; }
 #confirm-box a { border-bottom: 1px dotted #fff; cursor: pointer; }
+#info-box { width: 340px; padding: 20px; position: fixed; left: 50%; top: 100px; margin-left: -200px; background: #000; color: #fff; border: 10px solid #eee; }
+#info-box p { margin: 1em 0; }
+#info-box a { border-bottom: 1px dotted #fff; cursor: pointer; }
+#info-box textarea { width: 330px; height: 90px; padding: 5px; border: 0; }
 tfoot .name { padding-right: 4px; }
 tfoot .icon { width: 50px; height: 16px; float: right; margin: 5px 3px 0; cursor: pointer; background-position: 100% 50%; background-repeat: no-repeat; background-color: transparent; position: relative; }
 tfoot .icon span { position: absolute; right: 20px; top: -5px; }

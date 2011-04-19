@@ -46,7 +46,8 @@ var FeatureView = Backbone.View.extend({
     "click .delete": "confirmDelete",
     "blur :input": "finishEdit",
     "keyup .person :input": "upcaseInitials",
-    "contextmenu": "featureMenu"
+    "contextmenu": "featureMenu",
+    "click .info": "editInfo"
   },
 
   tagName: "tr",
@@ -87,6 +88,10 @@ var FeatureView = Backbone.View.extend({
       $(e.target).children(".value").hide().siblings(".edit").show().children(":input").focus();
     }
     $(this.el).addClass("editing");
+  },
+
+  editInfo: function(e){
+    new InfoView({ feature: this.model });
   },
 
   checkKey: function(e){
@@ -178,6 +183,50 @@ var ConfirmationView = Backbone.View.extend({
   }
 
 });
+
+var InfoView = Backbone.View.extend({
+
+  initialize: function(){
+    _.bindAll(this, 'keyPressed', 'close', 'render');
+    this.render();
+  },
+
+  id: "info-box",
+
+  events: {
+    "click #info-done": "done",
+    "click #info-cancel": "close"
+  },
+
+  render: function(){
+    $(this.el).html(ich.info({
+      description: this.options["feature"].get("description"),
+      notifications: this.options["feature"].get("notifications")
+    }));
+    $("body").append(this.el);
+    $(window).keydown(this.keyPressed);
+    $(window).unbind("keydown", MasterPlan.keyPressed);
+    return this;
+  },
+
+  keyPressed: function(e){
+    if (e.which == 27)
+      this.close();
+  },
+
+  done: function(){
+    this.options["feature"].save(this.$(":input").serializeObject());
+    this.close();
+  },
+
+  close: function(){
+    $(window).unbind("keydown", this.keyPressed);
+    $(window).keydown(MasterPlan.keyPressed);
+    $(this.el).remove();
+  }
+
+});
+
 
 
 $(function(){

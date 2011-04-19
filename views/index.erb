@@ -27,6 +27,7 @@
           <span class="edit" style="display:none">
             <input name="name" value="{{name}}">
           </span>
+          <span class="icon info"><img src="/images/info.png" alt="info" /></span>
           <span class="icon delete"><img src="/images/delete.png" alt="delete" /></span>
           <span class="icon handle"><img src="/images/handle.png" alt="move" /></span>
         </span>
@@ -63,6 +64,18 @@
     <script id="confirmation" type="text/html" charset="utf-8">
       <p>{{text}}</p>
       <p><a id="confirm-yes">YES</a> or <a id="confirm-no">NO</a></p>
+    </script>
+
+    <script id="info" type="text/html" charset="utf-8">
+      <p>
+        <strong>Description</strong><br>
+        <textarea name="description">{{description}}</textarea>
+      </p>
+      <p>
+        <strong>Notifications</strong><br>
+        <textarea name="notifications">{{notifications}}</textarea>
+      </p>
+      <p><a id="info-done">DONE</a> or <a id="info-cancel">CANCEL</a></p>
     </script>
 
     <script id="stats" type="text/html" charset="utf-8">
