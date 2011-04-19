@@ -1,10 +1,12 @@
 * { font-family: Helvetica, arial, sans-serif; }
 body { padding-bottom: 30px; min-width: 1100px; }
 h1 { width: 95%; margin: 50px auto 20px; font-size: 400%; }
+.icon img { width: 16px; height: 16px; float: right; }
 table { width: 95%; border-collapse: separate; border-spacing: 0; margin: 0 auto; }
 table th,
 table td { text-align: center; font-size: 14px; line-height: 2em; vertical-align: middle; background: #fff; }
 thead th { padding: 4px 0; border: 4px solid #000; border-width: 4px 0 2px; line-height: 1em; }
+thead th img { width: 16px; height: 16px; }
 th.person,
 th.importance,
 th.stage { width: 70px; }
@@ -23,8 +25,9 @@ td:first-child { text-align: left; border-left: 0; }
 tr .selection { display: none; }
 tr.selected .selection { display: block; position: absolute; left: -10px; top: 0; font-size: 1.4em; }
 .feature { position: relative; display: block; padding-left: 10px; padding-right: 20px; margin: 2px 2px 2px 0; background: #fafafa; }
-.feature .handle { position: absolute; top: 10px; right: 8px; width: 10px; height: 10px; background: transparent url("/images/handle.png") no-repeat 0 0; cursor: move; }
-.feature .delete { position: absolute; top: 8px; right: 5px; width: 16px; height: 16px; background: transparent url("/images/delete.png") no-repeat 0 0; cursor: pointer; display: none; }
+.feature .handle { position: absolute; top: 10px; right: 8px; width: 10px; height: 10px; cursor: move; }
+.feature .handle img { width: 10px; height: 10px; }
+.feature .delete { position: absolute; top: 8px; right: 5px; width: 16px; height: 16px; cursor: pointer; display: none; }
 .editing .feature .handle { display: none; }
 .deleting .feature .handle { display: none; }
 .deleting .feature .delete { display: block; }
@@ -40,7 +43,7 @@ tr.released .status { background: #0f0; }
 .edit input { width: 100%; padding: 0; margin: 0; border: 0; border-bottom: 1px dotted #000; background: transparent; outline: 0; font-size: 14px; }
 .person .edit input { text-transform: uppercase; text-align: center; }
 .target .edit input { text-align: center; }
-#no-plans { text-align: center; padding: 20px; background: #fafafa; }
+td.stage img { width: 10px; height: 10px; }
 table tr.ui-sortable-helper td { border: 1px solid #ccc; border-width: 1px 0; }
 #confirm-box { width: 340px; padding: 20px; position: fixed; left: 50%; top: 100px; margin-left: -200px; background: #000; color: #fff; text-align: center; border: 10px solid #eee; }
 #confirm-box p { margin: 1em 0; }
@@ -48,8 +51,5 @@ table tr.ui-sortable-helper td { border: 1px solid #ccc; border-width: 1px 0; }
 tfoot .name { padding-right: 4px; }
 tfoot .icon { width: 50px; height: 16px; float: right; margin: 5px 3px 0; cursor: pointer; background-position: 100% 50%; background-repeat: no-repeat; background-color: transparent; position: relative; }
 tfoot .icon span { position: absolute; right: 20px; top: -5px; }
-tfoot #add { background-image: url("/images/add.png"); }
-tfoot #remove { background-image: url("/images/remove.png"); }
-tfoot #done { background-image: url("/images/done.png"); }
 footer { width: 95%; margin: 40px auto 0; color: #aaa; text-align: right; font-size: 0.8em; line-height: 1.5; }
 footer a { color: #aaa; }
