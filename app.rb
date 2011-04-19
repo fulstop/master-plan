@@ -5,7 +5,7 @@ class MasterPlan < Sinatra::Base
   end
 
   get "/" do
-    @features = @plan.features.sort_by(&:position)
+    @features = @plan.features.select{|feature| feature.released_at.blank? || feature.released_at > 1.day.ago }.sort_by(&:position)
     erb :index
   end
 
@@ -40,6 +40,11 @@ class MasterPlan < Sinatra::Base
   put "/features/:id" do
     @feature = @plan.features.get(params[:id])
     @feature.attributes = JSON.parse(request.body.read)
+    if @feature.stage.to_i == 6
+      @feature.released_at = Time.now
+    else
+      @feature.released_at = nil
+    end
     @feature.save
   end
 
@@ -101,6 +106,8 @@ class Feature
   attribute :importance, Integer, :default => 3
   attribute :target, String
   attribute :stage, Integer, :default => 0
+
+  attribute :released_at, Time
 end
 
 Feature.include_root_in_json = false
