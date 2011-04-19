@@ -52,7 +52,6 @@ end
 
 class MasterPlan
   module Config
-
     mattr_accessor :settings
 
     def self.load!
@@ -68,15 +67,12 @@ class MasterPlan
     def self.[](key)
       settings[key.to_s]
     end
-
   end
 
   module Redis
-
     def self.connection
       @connection ||= ::Redis.connect(:url => MasterPlan::Config[:redis_url])
     end
-
   end
 end
 
@@ -84,7 +80,6 @@ MasterPlan::Config.load!
 
 
 class Plan
-
   include Toy::Store
   store :redis, MasterPlan::Redis.connection
 
@@ -92,11 +87,9 @@ class Plan
   index :name
 
   list :features
-
 end
 
 class Feature
-
   include Toy::Store
   store :redis, MasterPlan::Redis.connection
 
@@ -108,7 +101,6 @@ class Feature
   attribute :importance, Integer, :default => 3
   attribute :target, String
   attribute :stage, Integer, :default => 0
-
 end
 
 Feature.include_root_in_json = false
