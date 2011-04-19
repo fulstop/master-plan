@@ -3,21 +3,24 @@ class MasterPlan < Sinatra::Base
     @plan = Plan.first_or_create_by_name("MasterPlan")
   end
 
-  before "/(m|features)?" do
-    @features = @plan.features.select{|feature|
-                  feature.released_at.blank? || feature.released_at > 1.day.ago
-                }.sort_by(&:position)
-  end
-
   get "/" do
+    @features = @plan.features.select{|feature|
+                  feature.released_at.nil? || feature.released_at > 1.day.ago
+                }.sort_by(&:position)
     erb :index
   end
 
   get "/m" do
+    @features = @plan.features.select{|feature|
+                  feature.released_at.nil? || feature.released_at > 1.day.ago
+                }.sort_by(&:position)
     erb :mobile
   end
 
   get "/features" do
+    @features = @plan.features.select{|feature|
+                  feature.released_at.nil? || feature.released_at > 1.day.ago
+                }.sort_by(&:position)
     @features.to_json
   end
 
@@ -110,5 +113,8 @@ class Feature
   attribute :stage, Integer, :default => 0
 
   attribute :released_at, Time
+
+  attribute :description, String
+  attribute :notifications, String
 end
 Feature.include_root_in_json = false
