@@ -1,21 +1,24 @@
 class MasterPlan < Sinatra::Base
-
   before do
     @plan = Plan.first_or_create_by_name("MasterPlan")
   end
 
+  before "/(m|features)?" do
+    @features = @plan.features.select{|feature|
+                  feature.released_at.blank? || feature.released_at > 1.day.ago
+                }.sort_by(&:position)
+  end
+
   get "/" do
-    @features = @plan.features.select{|feature| feature.released_at.blank? || feature.released_at > 1.day.ago }.sort_by(&:position)
     erb :index
   end
 
   get "/m" do
-    @features = @plan.features.sort_by(&:position)
     erb :mobile
   end
 
   get "/features" do
-    @plan.features.sort_by(&:position).to_json
+    @features.to_json
   end
 
   post "/features" do
@@ -51,7 +54,6 @@ class MasterPlan < Sinatra::Base
   delete "/features/:id" do
     @feature = @plan.features.destroy(params[:id])
   end
-
 end
 
 
@@ -109,5 +111,4 @@ class Feature
 
   attribute :released_at, Time
 end
-
 Feature.include_root_in_json = false
