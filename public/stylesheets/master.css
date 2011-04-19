@@ -62,3 +62,4 @@ tfoot .icon { width: 50px; height: 16px; float: right; margin: 5px 3px 0; cursor
 tfoot .icon span { position: absolute; right: 20px; top: -5px; }
 footer { width: 95%; margin: 40px auto 0; color: #aaa; text-align: right; font-size: 0.8em; line-height: 1.5; }
 footer a { color: #aaa; }
+footer #mobile { margin-top: 2em; }
