@@ -311,10 +311,10 @@ $(function(){
         if (e.which == 74 || e.which == 190) { this.moveSelectionDown(); }                               // j or .
       }
       if (this.removeMode) {
-        if (e.which == 69 || e.which == 27 || e.which == 13) { this.leaveRemoveMode(); }                 // e, esc, or enter
-        if (e.which == 88) { Features.selection.view.confirmDelete(); }                                  // x
+        if (e.which == 27) { this.leaveRemoveMode(); }                                                   // esc
+        if (e.which == 88 || e.which == 13) { Features.selection.view.confirmDelete(); }                 // x or enter
       } else if (!this.editMode) {
-        if (e.which == 69 || e.which == 27 || e.which == 88) { this.enterRemoveMode(); }                 // x, e or esc
+        if (e.which == 88) { this.enterRemoveMode(); }                                                   // x
         if (e.which == 13) { $(Features.selection.view.el).find(".value").first().trigger("dblclick"); } // enter
         if (e.which == 78) { this.newFeature(); }                                                        // n
       }
