@@ -2,17 +2,19 @@
 <html>
   <head>
     <title>MASTERPLAN.</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
     <style type="text/css" media="screen">
-      li.stage { padding-left: 40px !important; }
+      li.stage { padding-left: 30px !important; }
       li.stage .ui-li-desc img { display: inline-block; margin-right: 4px; vertical-align: bottom; }
       li.stage .ui-li-desc .detail { display: inline-block; opacity: 0.5; }
-      li.stage .detail.person { width: 60px; }
-      li.stage .detail.importance { width: 38px; }
+      li.stage .detail.importance { width: 40px; }
+      li.stage .detail.person { width: 55px; }
       li.stage .detail img { width: 16px; height: 16px; }
-      .stage-mark { position: absolute; height: 100%; width: 24px; left: 0; top: 0; }
+      .stage-mark { position: absolute; height: 100%; width: 24px; left: -30px; top: 0; }
       .stage-mark img { position: absolute; left: 50%; top: 50%; margin: -10px 0 0 -9px; width: 16px; height: 16px; }
       .stage-0 .stage-mark { background-color: #fafafa; border-right: 4px solid #ccc; }
       .stage-1 .stage-mark { background-color: #fffded; border-right: 4px solid yellow; }
@@ -34,13 +36,15 @@
         <ul data-role="listview" data-filter="true">
           <% @features.each do |feature| %>
             <li class="stage stage-<%= feature.stage %>">
+              <a href="#<%= feature.id %>">
               <h3 class="ui-li-heading"><%= feature.name %></h3>
               <span class="stage-mark"><img src="/images/<%= %w{waiting started qa staging alpha beta done}[feature.stage] %>.png" /></span>
               <span class="ui-li-desc">
-                <span class="detail person"><img src="/images/person.png" /><%= feature.person %></span>
                 <span class="detail importance"><img src="/images/importance.png" /><%= feature.importance %></span>
+                <span class="detail person"><img src="/images/person.png" /><%= feature.person %></span>
                 <span class="detail target"><img src="/images/target.png" /><%= feature.target %></span>
               </span>
+              </a>
             </li>
           <% end %>
         </ul>
@@ -50,6 +54,18 @@
         <h4><%= @features.size %> features</h4>
       </div>
     </div>
+
+    <% @features.each do |feature| %>
+      <div data-role="page" id="<%= feature.id %>">
+        <div data-role="header"><h1><%= feature.name %></h1></div>
+        <div data-role="content">
+          <h4>Description</h4>
+          <p><%= feature.description || "None." %></p>
+          <h4>Notifications</h4>
+          <p><%= feature.notifications || "None." %></p>
+        </div>
+      </div>
+    <% end %>
 
   </body>
 </html>
