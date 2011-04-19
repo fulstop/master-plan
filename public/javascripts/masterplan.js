@@ -13,6 +13,7 @@ var FeatureList = Backbone.Collection.extend({
   },
 
   updateSelection: function(feature){
+    if (!feature) return;
     this.selection = feature;
     $("tr").removeClass("selected");
     $(feature.view.el).addClass("selected");
