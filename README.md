@@ -44,12 +44,13 @@ Maybe you don't want your master plan visible to the world? Right now, the easie
 Known Issues/Limitations
 ------------------------
 
-* There's currently no support for multiple people working in application at the same time. Things get out of sync pretty badly. It's a tough problem that's at the top of the list to be solved.
 * Reordering features messes up keyboard navigation. It was working correctly at some point, but some sort of bug crept in.
 
 Feature Wish List
 -----------------
 
+* In-app authentication for mobile app password caching (cuz I'm lazy)
+* Smartly update items changed when two people use the app simultaneously
 * Sorting options (including custom sort, like it is now)
 * Filtering (like in the mobile version)
 

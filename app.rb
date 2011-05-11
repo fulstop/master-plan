@@ -26,6 +26,7 @@ class MasterPlan < Sinatra::Base
 
   post "/features" do
     @feature = @plan.features.create(JSON.parse(request.body.read))
+    @plan.updated!
     @feature.to_json
   end
 
@@ -36,6 +37,7 @@ class MasterPlan < Sinatra::Base
       feature.position = i
       feature.save
     end
+    @plan.updated!
   end
 
   get "/features/:id" do
@@ -52,10 +54,16 @@ class MasterPlan < Sinatra::Base
       @feature.released_at = nil
     end
     @feature.save
+    @plan.updated!
   end
 
   delete "/features/:id" do
     @feature = @plan.features.destroy(params[:id])
+    @plan.updated!
+  end
+
+  get "/check" do
+    { :last_changed => @plan.last_changed }.to_json
   end
 end
 
@@ -95,8 +103,14 @@ class Plan
 
   attribute :name, String
   index :name
+  attribute :last_changed, Time
 
   list :features
+
+  def updated!
+    self.last_changed = Time.now.utc
+    save
+  end
 end
 
 class Feature

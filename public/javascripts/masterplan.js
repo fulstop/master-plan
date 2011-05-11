@@ -71,7 +71,7 @@ var FeatureView = Backbone.View.extend({
   },
 
   setStage: function(e){
-    this.model.save({ stage: Number($(e.target).attr("data-stage")) });
+    this.model.save({ stage: Number($(e.target).attr("data-stage")) }, { success: function(){ MasterPlan.updateLastChanged(); }});
   },
 
   upcaseInitials: function(e){
@@ -106,7 +106,7 @@ var FeatureView = Backbone.View.extend({
     } else {
       return true;
     }
-    this.model.save(this.$(":input").serializeObject());
+    this.model.save(this.$(":input").serializeObject(), { success: function(){ MasterPlan.updateLastChanged(); }});
     this.$(".edit").hide().each(function(){
       $(this).siblings(".value").text($(this).children(":input").val()).show();
     });
@@ -173,6 +173,8 @@ var ConfirmationView = Backbone.View.extend({
   },
 
   no: function(){
+    if (this.options["onNo"])
+      this.options["onNo"]();
     this.close();
   },
 
@@ -215,7 +217,7 @@ var InfoView = Backbone.View.extend({
   },
 
   done: function(){
-    this.options["feature"].save(this.$(":input").serializeObject());
+    this.options["feature"].save(this.$(":input").serializeObject(), { success: function(){ MasterPlan.updateLastChanged(); }});
     this.close();
   },
 
@@ -235,11 +237,12 @@ $(function(){
 
     el: $("#feature-list"),
 
+    trackChanges: true,
     removeMode: false,
     editMode: false,
 
     initialize: function(){
-      _.bindAll(this, "addOne", "addAll", "removeOne", "render", "keyPressed");
+      _.bindAll(this, "addOne", "addAll", "removeOne", "render", "keyPressed", "updateLastChanged");
 
       Features.bind("add", this.addOne);
       Features.bind("remove", this.removeOne);
@@ -265,10 +268,15 @@ $(function(){
             type: "PUT",
             contentType: "application/json",
             processData: false,
-            data: JSON.stringify($(this).sortable("toArray"))
+            data: JSON.stringify($(this).sortable("toArray")),
+            success: function(){
+              MasterPlan.updateLastChanged();
+            }
           });
         }
       });
+
+      this.updateLastChanged();
 
       $(window).keydown(this.keyPressed);
     },
@@ -368,10 +376,30 @@ $(function(){
         if (e.which == 13) { $(Features.selection.view.el).find(".value").first().trigger("dblclick"); } // enter
         if (e.which == 78) { this.newFeature(); }                                                        // n
       }
+    },
+
+    updateLastChanged: function(){
+      this.trackChanges = false;
+      $.get("/check", function(data){
+        MasterPlan.lastChanged = data["last_changed"];
+        MasterPlan.trackChanges = true;
+      }, "json");
     }
 
   });
 
   window.MasterPlan = new MasterPlanView;
+
+  setInterval(function(){
+    $.get("/check", function(data){
+      if (MasterPlan.trackChanges && data["last_changed"] != MasterPlan.lastChanged) {
+        new ConfirmationView({
+          text: "Someone has made a change to the plan. Would you like to reload the page?",
+          onYes: function(){ window.location.reload(); },
+          onNo: function(){ MasterPlan.lastChanged = data["last_changed"]; }
+        });
+      }
+    }, "json");
+  }, 3000);
 
 });
